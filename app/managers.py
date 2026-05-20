@@ -11,15 +11,17 @@ class ActorManager:
     def create(self, first_name: str, last_name: str) -> None:
         cursor = self.connection.cursor()
         query = (
-            f"INSERT INTO {self.table_name} "
+            'INSERT INTO "{}" '
             "(first_name, last_name) VALUES (?, ?)"
-        )
+        ).format(self.table_name)
         cursor.execute(query, (first_name, last_name))
         self.connection.commit()
 
     def all(self) -> list[Actor]:
         cursor = self.connection.cursor()
-        query = f"SELECT id, first_name, last_name FROM {self.table_name}"
+        query = (
+            'SELECT id, first_name, last_name FROM "{}"'
+        ).format(self.table_name)
         cursor.execute(query)
         rows = cursor.fetchall()
 
@@ -31,14 +33,14 @@ class ActorManager:
     def update(self, pk: int, new_first_name: str, new_last_name: str) -> None:
         cursor = self.connection.cursor()
         query = (
-            f"UPDATE {self.table_name} "
+            'UPDATE "{}" '
             "SET first_name = ?, last_name = ? WHERE id = ?"
-        )
+        ).format(self.table_name)
         cursor.execute(query, (new_first_name, new_last_name, pk))
         self.connection.commit()
 
     def delete(self, pk: int) -> None:
         cursor = self.connection.cursor()
-        query = f"DELETE FROM {self.table_name} WHERE id = ?"
+        query = 'DELETE FROM "{}" WHERE id = ?'.format(self.table_name)
         cursor.execute(query, (pk,))
         self.connection.commit()
